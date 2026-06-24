@@ -138,7 +138,46 @@ function gameEngine() {
     board.appendChild(foodEl);
 }
 
+// TOUCH CONTROLS (SWIPE)
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", (e) => {
+    let touchEndX = e.changedTouches[0].clientX;
+    let touchEndY = e.changedTouches[0].clientY;
+
+    let dx = touchEndX - touchStartX;
+    let dy = touchEndY - touchStartY;
+
+    // horizontal swipe
+    if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 30 && inputDir.x !== -1) {
+            inputDir = { x: 1, y: 0 }; // right
+        } else if (dx < -30 && inputDir.x !== 1) {
+            inputDir = { x: -1, y: 0 }; // left
+        }
+    }
+    // vertical swipe
+    else {
+        if (dy > 30 && inputDir.y !== -1) {
+            inputDir = { x: 0, y: 1 }; // down
+        } else if (dy < -30 && inputDir.y !== 1) {
+            inputDir = { x: 0, y: -1 }; // up
+        }
+    }
+
+    // first swipe starts game
+    if (!started) startGame();
+});
+
 // CONTROLS 
+
 
 window.addEventListener("keydown", (e) => {
 
